@@ -74,6 +74,7 @@ A modern real-time chat application built with Next.js 13, TypeScript, and Socke
 
 ![Register](public/register.png)
 ## Live Demo
+# login to vercel to use deployed link
 Frontend: [https://chat-app-frontend-seven-theta.vercel.app/login](https://chat-app-frontend-seven-theta.vercel.app/login)
 
 Backend Repository: [https://github.com/kartikey-shivam/chat-app-backend](https://github.com/kartikey-shivam/chat-app-backend)
