@@ -12,14 +12,14 @@ import { Plus, Search } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface ChatSession {
-  id: number
+  id: string
   title: string
 }
 
 export function SessionList({ sessions, onCreate, onSelect }: {
   sessions: ChatSession[]
   onCreate: () => void
-  onSelect: (id: number) => void
+  onSelect: (id: string) => void
 }) {
   const [searchTerm, setSearchTerm] = useState('')
 

@@ -1,118 +1,111 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { api } from '@/lib/api'
-import { useAuth } from '@/contexts/AuthContext'
-import { useRouter } from 'next/navigation'
+"use client"
 
-interface RegisterFormData {
-  email: string
-  password: string
-  confirmPassword: string
-  username: string
-}
+import type React from "react"
 
-export function RegisterForm() {
-  const { login } = useAuth();
-  const router = useRouter();
-  const [formData, setFormData] = useState<RegisterFormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: ''
-  })
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      // Validate passwords match
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match')
-      }
-      
-      // Add your registration logic here
-      const response = await api.auth.register(formData.username, formData.email, formData.password)
-      console.log(response,"36")
-      login(response?.jwt, {
-        id: response?.user.id,
-        email: response?.user.email,
-        username:response?.user.username
-      });
-      router.push("/chat");
-    } catch (error) {
-      console.error('Registration failed:', error)
-    }
-  }
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/ui/card"
+import { Eye, EyeOff, UserPlus } from "lucide-react"
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+export function RegisterForm({ formData, handleChange, handleSubmit }: any) {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(e)
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="text-2xl">Create Account</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="username">Full Name</Label>
-            <Input
-              id="username"
-              name="username"
-              type="text"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-50 p-4">
+      <Card className="w-full max-w-md bg-white/70 backdrop-blur-lg border-0 shadow-lg">
+        <CardContent className="pt-8">
+          <div className="flex justify-center mb-6">
+            <div className="p-3 bg-gray-100 rounded-full">
+              <UserPlus className="w-6 h-6 text-black" />
+            </div>
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+          <div className="text-center mb-6">
+            <h1 className="text-2xl text-black font-semibold mb-2">Create your account</h1>
+            <p className="text-gray-600">Join us to bring your words, data, and teams together</p>
           </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-3">
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Full Name"
+                value={formData.username}
+                onChange={handleInputChange}
+                required
+                className="bg-gray-50/50 text-black"
+              />
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="bg-gray-50/50 text-black"
+              />
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-gray-50/50 text-black pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
 
-          <Button className="w-full" type="submit">
-            Register
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  required
+                  className="bg-gray-50/50 text-black pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                >
+                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <Button className="w-full bg-gray-900 hover:bg-gray-800" type="submit">
+              Get Started
+            </Button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <p  className="text-sm text-gray-600 mb-4"><a href="/login">Sign In</a></p>
+           
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
+

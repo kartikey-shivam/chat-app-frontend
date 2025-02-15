@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
-const API_BASE = 'http://localhost:1337/api';
+const API_BASE = 'https://chat-app-backend-production-9e6f.up.railway.app/api';
 
 // Response types
 interface AuthResponse {
@@ -74,7 +74,19 @@ export const api = {
       }
     },
   },
-
+  user:{
+    getAllUser : async (jwt: string): Promise<any> => {
+      try {
+        const response = await axios.get(`${API_BASE}/users`, {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
+        console.log(response,"11")
+        return response.data;
+      } catch (error) {
+        throw handleApiError(error);
+      }
+    }
+  },
   sessions: {
     create: async (title: string, jwt: string): Promise<ChatSession> => {
       try {
@@ -91,7 +103,10 @@ export const api = {
         throw handleApiError(error);
       }
     },
-
+    list: async (userId: string) => {
+      const response = await axios.get(`/sessions?userId=${userId}`)
+      return response.data
+    },
     getAll: async (jwt: string): Promise<ChatSession[]> => {
       try {
         const response = await axios.get<ChatSession[]>(
