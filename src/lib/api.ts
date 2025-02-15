@@ -74,7 +74,7 @@ export const api = {
     },
   },
   user:{
-    getAllUser : async (jwt: string): Promise<any> => {
+    getAllUser : async (jwt: string): Promise<unknown> => {
       try {
         const response = await axios.get(`${API_BASE}/users`, {
           headers: { Authorization: `Bearer ${jwt}` },
