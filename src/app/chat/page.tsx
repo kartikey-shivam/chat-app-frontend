@@ -50,7 +50,7 @@ export default function HomePage() {
               <h1 className="hidden md:flex text-xl font-bold text-black">Chat Assistant</h1>
 
             </div>
-           {!selectedSession && <Button className="text-black" variant="ghost" onClick={createNewSession}>
+           {!selectedSession && <Button className="text-black border-red-300 border-1" variant="outline" onClick={createNewSession}>
               <Plus className="h-4 w-4 mr-2 text-black" />
               New Session
             </Button>}
@@ -65,7 +65,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <div className="flex h-[calc(100vh-65px)] bg-white/70 backdrop-blur-lg border-0 shadow-lg rounded-lg">
+      <div className="flex h-[calc(100vh-65px)] bg-white/70 backdrop-blur-lg border-0 shadow-lg rounded-lg overflow-auto">
         {/* <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}

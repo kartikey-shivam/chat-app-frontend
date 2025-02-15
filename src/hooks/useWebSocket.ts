@@ -79,7 +79,6 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
     })
 
     socketInstance.on("error", (error) => {
-      console.error("Socket error:", error)
       setIsConnected(false)
     })
 

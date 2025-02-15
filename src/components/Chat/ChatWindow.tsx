@@ -64,7 +64,7 @@ export const ChatWindow = ({ sessionId }: ChatWindowProps) => {
     <div className="h-full flex items-center justify-center bg-gradient-to-b from-blue-100 to-blue-50">
       <div className="w-full max-w-[80%] bg-white/70 backdrop-blur-lg border-0 shadow-lg rounded-lg overflow-hidden">
         <div className="p-4 bg-blue-400 text-white flex items-center justify-between">
-          <h3 className="font-semibold text-lg">Chat Session #{sessionId}</h3>
+          <h3 className="hidden md:flex font-semibold text-lg">Chat Session #{sessionId.slice(0,6)}</h3>
           <div className="flex items-center gap-2">
             <span className={`h-2 w-2 rounded-full ${isConnected ? "bg-green-400" : "bg-red-400"}`} />
             <span className="text-sm">{isConnected ? "Connected" : "Connecting..."}</span>

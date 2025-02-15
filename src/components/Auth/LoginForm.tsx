@@ -28,7 +28,7 @@ export function LoginForm() {
       router.push("/chat")
     } catch (err) {
       console.error(err)
-      setError(`Something went wrong`)
+      setError(`Please login strapi as admin using backend live link`)
     }
   }
 
