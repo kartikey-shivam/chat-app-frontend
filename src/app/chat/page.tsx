@@ -1,6 +1,5 @@
 "use client"
-import { use, useEffect, useState } from "react"
-import { SessionList } from "@/components/SessionList"
+import {  useState } from "react"
 import { ChatWindow } from "@/components/Chat/ChatWindow"
 import { Button } from "@/components/ui/button"
 import { LayoutDashboard, LogOut, Plus } from "lucide-react"
@@ -17,9 +16,8 @@ interface ChatSession {
 export default function HomePage() {
   const [sessions, setSessions] = useState<ChatSession[]>([])
   const [selectedSession, setSelectedSession] = useState<string | null>(null)
-  const {jwt,user,logout} = useAuth()
+  const {user,logout} = useAuth()
  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
   const handleLogout = (): void => {
     logout()
     toast.success("Logged out successfully")

@@ -3,7 +3,6 @@
 import { RegisterForm } from '@/components/Auth/RegisterForm'
 import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/lib/api';
-import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

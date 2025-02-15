@@ -27,7 +27,7 @@ export function LoginForm() {
       login(response.jwt, response.user)
       router.push("/chat")
     } catch (err) {
-      setError("Invalid credentials")
+      setError(`${err}`)
     }
   }
 

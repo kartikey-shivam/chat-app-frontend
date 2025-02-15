@@ -31,7 +31,7 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
   const [isConnected, setIsConnected] = useState(false)
 
   const handleMessageResponse = useCallback((data: { userMessage: Message, serverMessage: Message }) => {
-    console.log("Received message response:", data)
+    console.log("Received message response:", data,isConnected)
     onMessage(data)
   }, [onMessage])
 

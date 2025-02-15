@@ -7,8 +7,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Eye, EyeOff, UserPlus } from "lucide-react"
-
-export function RegisterForm({ formData, handleChange, handleSubmit }: any) {
+interface RegisterFormProps {
+  formData: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    username: string;
+  };
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+}
+export function RegisterForm({ formData, handleChange, handleSubmit }: RegisterFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
