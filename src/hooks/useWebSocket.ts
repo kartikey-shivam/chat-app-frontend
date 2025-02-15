@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react"
 import { io, Socket } from "socket.io-client"
 
+const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL
+
 interface Message {
   id: string
   content: string
@@ -35,7 +37,6 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
 
   const handleSessionStarted = useCallback((data: SessionStartMessage) => {
     console.log("Received session started event:", data)
-    // Convert the session start message to match Message interface
     const welcomeMessage: Message = {
       id: Date.now().toString(),
       content: data.content,
@@ -47,9 +48,17 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
   }, [onMessage])
 
   useEffect(() => {
-    const socketInstance = io("https://chat-app-backend-production-9e6f.up.railway.app", {
+    if (!SOCKET_URL) {
+      console.error("Socket URL not configured")
+      return
+    }
+
+    const socketInstance = io(SOCKET_URL, {
       path: "/socket.io/chat",
-      transports: ['websocket']
+      transports: ['websocket'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
     })
 
     socketInstance.on("connect", () => {
@@ -70,14 +79,17 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
     })
 
     socketInstance.on("error", (error) => {
-      console.log("Socket error:", error)
+      console.error("Socket error:", error)
+      setIsConnected(false)
     })
 
     setSocket(socketInstance)
 
     return () => {
-      socketInstance.removeAllListeners()
-      socketInstance.disconnect()
+      if (socketInstance) {
+        socketInstance.removeAllListeners()
+        socketInstance.disconnect()
+      }
     }
   }, [userId, sessionId, handleMessageResponse, handleSessionStarted])
 
@@ -86,13 +98,14 @@ export const useWebSocket = ({ userId, sessionId, onMessage }: UseWebSocketProps
       socket.emit("sendMessage", {
         content,
         userId,
-        sessionId,
-        session: sessionId
+        sessionId
       })
+    } else {
+      console.warn("Socket not connected, message not sent")
     }
   }, [socket, userId, sessionId])
 
-  return { 
+  return {
     sendMessage,
     isConnected: socket?.connected || false
   }

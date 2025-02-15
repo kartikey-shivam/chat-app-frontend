@@ -1,8 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
-const API_BASE = 'https://chat-app-backend-production-9e6f.up.railway.app/api';
-
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:1337';
 // Response types
 interface AuthResponse {
   jwt: string;
