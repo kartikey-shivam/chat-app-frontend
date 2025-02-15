@@ -1,42 +1,39 @@
+  import { NextResponse } from 'next/server'
+  import type { NextRequest } from 'next/server'
 
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+  const publicRoutes = ['/login', '/register']
 
-// Routes that don't require authentication
-const publicRoutes = ['/login', '/register']
-
-export function middleware(request: NextRequest) {
-  // Get the pathname of the request
-  const { pathname } = request.nextUrl
+  export function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl
   
-  // Get JWT from cookies
-  const token = request.cookies.get('jwt')?.value
+    const token = request.cookies.get('jwt')?.value
   
-  // Check if the path is public
-  const isPublicRoute = publicRoutes.includes(pathname)
+    if (pathname === '/') {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
 
-  // Redirect authenticated users away from public routes (like login)
-  if (isPublicRoute && token) {
-    return NextResponse.redirect(new URL('/chat', request.url))
+    const isPublicRoute = publicRoutes.includes(pathname)
+
+    if (isPublicRoute && token) {
+      return NextResponse.redirect(new URL('/chat', request.url))
+    }
+
+    if (!isPublicRoute && !token) {
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('from', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+
+    return NextResponse.next()
   }
 
-  // Redirect unauthenticated users to login
-  if (!isPublicRoute && !token) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('from', pathname)
-    return NextResponse.redirect(loginUrl)
+  export const config = {
+    matcher: [
+      '/',
+      '/chat/:path*',
+      '/profile/:path*',
+      '/settings/:path*',
+      '/login',
+      '/register'
+    ]
   }
-
-  return NextResponse.next()
-}
-
-// Configure which routes to run middleware on
-export const config = {
-  matcher: [
-    '/chat/:path*',
-    '/profile/:path*',
-    '/settings/:path*',
-    '/login',
-    '/register'
-  ]
-}
