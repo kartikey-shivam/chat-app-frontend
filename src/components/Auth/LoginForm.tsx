@@ -27,7 +27,8 @@ export function LoginForm() {
       login(response.jwt, response.user)
       router.push("/chat")
     } catch (err) {
-      setError(`${err}`)
+      console.error(err)
+      setError(`Something went wrong`)
     }
   }
 
